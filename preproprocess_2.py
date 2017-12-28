@@ -38,10 +38,10 @@ import re
 
 #this is the path to the XML directory of all the images
 
-#xmlpath = "C:/Users/edmon_000/Desktop/mldmyear2/computer vision/VOCdevkit/VOC2007/Annotations/"
-
-xmlpath = "C:/Users/edmon_000/Desktop/VOCdevkit_train/VOC2007/Annotations/"
-imgpath = "C:/Users/edmon_000/Desktop/VOCdevkit_train/VOC2007/JPEGImages/"
+xmlpath = "C:/Users/edmon_000/Desktop/mldmyear2/computer vision/VOCdevkit/VOC2007/Annotations/"
+imgpath = "C:/Users/edmon_000/Desktop/mldmyear2/computer vision/VOCdevkit/VOC2007/JPEGImages/"
+#xmlpath = "C:/Users/edmon_000/Desktop/VOCdevkit_train/VOC2007/Annotations/"
+#imgpath = "C:/Users/edmon_000/Desktop/VOCdevkit_train/VOC2007/JPEGImages/"
 
 #imgpath = 'C:/Users/edmon_000/Desktop/mldmyear2/computer vision/VOCdevkit/VOC2007/JPEGImages/'
 imgresizedpath = 'C:/Users/edmon_000/Desktop/mldmyear2/computer vision/VOCdevkit/VOC2007/input_data_pre_proprocessed/'
@@ -103,7 +103,9 @@ final_imgs = []
 final_imgclasses = []
 badimages = [] 
 
-i = 1
+new_dict = []
+
+i = 0
 
 # resizes and stores images if the jpg images are found in the dictionary images_dict above
 for image in alloriginals:
@@ -119,6 +121,7 @@ for image in alloriginals:
         #then add it's corresponding class retrieved from the xml dictionary
         final_imgclasses.append(images_dict[imagenum])
         final_imgs.append(i)
+        new_dict.append(imagenum)
         i += 1
         
         #now save the good resized images (ones which are in the dictionary)
@@ -132,6 +135,12 @@ for image in alloriginals:
         badimages.append(image)
 
 
-#test_with_labels = map(zip(final_imgs,final_imgclasses)
-test_labels = list(map(list,zip(final_imgs,final_imgclasses)))
-np.save(imgpath+"train_val_labels",test_labels)
+test_with_labels = map(zip(final_imgs,final_imgclasses))
+np.save(imgpath+"test_labels",test_with_labels)
+test_dic = dict(zip(new_dict, final_imgs))
+np.save(imgpath+"test_labels_dict",test_dic)
+
+#train_labels = list(map(list,zip(final_imgs,final_imgclasses)))
+#np.save(imgpath+"train_val_labels",train_labels)
+#train_dic = dict(zip(new_dict, final_imgs))
+#np.save(imgpath+"train_val_labels_dict",train_dic)
