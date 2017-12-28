@@ -135,10 +135,15 @@ for image in alloriginals:
         badimages.append(image)
 
 
-test_with_labels = map(zip(final_imgs,final_imgclasses))
-np.save(imgpath+"test_labels",test_with_labels)
-test_dic = dict(zip(new_dict, final_imgs))
+#test_with_labels = list(map(list,zip(final_imgs,final_imgclasses)))
+#np.save(imgpath+"test_labels",test_with_labels)
+#test_dic = dict(zip(new_dict, final_imgclasses))
+#train_dic = dict(zip(new_dict, final_imgclasses))
+#np.save(imgpath+"train_labels_dict",train_dic)
+
+test_dic = dict(zip(new_dict, final_imgclasses))
 np.save(imgpath+"test_labels_dict",test_dic)
+
 
 #train_labels = list(map(list,zip(final_imgs,final_imgclasses)))
 #np.save(imgpath+"train_val_labels",train_labels)
