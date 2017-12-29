@@ -38,10 +38,10 @@ import re
 
 #this is the path to the XML directory of all the images
 
-xmlpath = "C:/Users/edmon_000/Desktop/mldmyear2/computer vision/VOCdevkit/VOC2007/Annotations/"
-imgpath = "C:/Users/edmon_000/Desktop/mldmyear2/computer vision/VOCdevkit/VOC2007/JPEGImages/"
-#xmlpath = "C:/Users/edmon_000/Desktop/VOCdevkit_train/VOC2007/Annotations/"
-#imgpath = "C:/Users/edmon_000/Desktop/VOCdevkit_train/VOC2007/JPEGImages/"
+#xmlpath = "C:/Users/edmon_000/Desktop/mldmyear2/computer vision/VOCdevkit/VOC2007/Annotations/"
+#imgpath = "C:/Users/edmon_000/Desktop/mldmyear2/computer vision/VOCdevkit/VOC2007/JPEGImages/"
+xmlpath = "C:/Users/edmon_000/Desktop/mldmyear2/computer vision/VOCdevkit/VOC2007/TrainingData/VOCdevkit_train/VOC2007/Annotations/"
+imgpath = "C:/Users/edmon_000/Desktop/mldmyear2/computer vision/VOCdevkit/VOC2007/TrainingData/VOCdevkit_train/VOC2007/JPEGImages"
 
 #imgpath = 'C:/Users/edmon_000/Desktop/mldmyear2/computer vision/VOCdevkit/VOC2007/JPEGImages/'
 imgresizedpath = 'C:/Users/edmon_000/Desktop/mldmyear2/computer vision/VOCdevkit/VOC2007/input_data_pre_proprocessed/'
@@ -80,14 +80,29 @@ classes = {obj: num for num, obj in classes.items()}
 #these will be used to create the dictionary images_dict which maps image id with numerical class (0..19). 
 xml_imgnums    = []
 xml_imgclasses = []
+child_objects  = []
 # read all xml and load into a tuple
 # e[1] contains the image number
 # e[6][0] contains image class
+
+i = 1
 for f in allclassfiles:
     e = xml.etree.ElementTree.parse(f).getroot()
-    imgnum = e[1].text
-    xml_imgnums.append(int(re.sub('\.jpg$','',imgnum)))
-    xml_imgclasses.append(classes.get(e[6][0].text))
+    xml_imgnums.append(int(re.sub('\.jpg$','',e[1].text))) #appends image num
+
+    
+    child_objects  = []
+    child_object_index = 6
+    stop = False 
+   
+    while not stop:
+        try:
+            object_class = classes.get(e[child_object_index][0].text)
+            child_objects.append(object_class)
+            child_object_index += 1
+        except IndexError:     
+            stop = True
+    xml_imgclasses.append(child_objects)  
     #print(imgnum + " " + e[6][0].text + " " + str(classes.get(e[6][0].text)))
 
 
@@ -138,11 +153,11 @@ for image in alloriginals:
 #test_with_labels = list(map(list,zip(final_imgs,final_imgclasses)))
 #np.save(imgpath+"test_labels",test_with_labels)
 #test_dic = dict(zip(new_dict, final_imgclasses))
-#train_dic = dict(zip(new_dict, final_imgclasses))
-#np.save(imgpath+"train_labels_dict",train_dic)
+train_dic = dict(zip(new_dict, final_imgclasses))
+np.save(imgpath+"train_labels_dict",train_dic)
 
-test_dic = dict(zip(new_dict, final_imgclasses))
-np.save(imgpath+"test_labels_dict",test_dic)
+#test_dic = dict(zip(new_dict, final_imgclasses))
+#np.save(imgpath+"test_labels_dict",test_dic)
 
 
 #train_labels = list(map(list,zip(final_imgs,final_imgclasses)))
